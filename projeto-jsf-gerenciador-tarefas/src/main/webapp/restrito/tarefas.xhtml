@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>Tarefas</title>
+</h:head>
+<h:body>
+	<ui:include src="/restrito/menu.xhtml" />
+
+	<center>
+
+		<p:panel>
+			<h1>Cadastro de Tarefas</h1>
+			<h:form id="form_tarefa" prependId="false">
+				<p:panelGrid id="panel_tarefa" columns="2">
+
+					<p:outputLabel value="Login do Dono " />
+					<p:column>
+						<p:inputText id="login_dono_tarefa" required="true"
+							value="#{tarefaBeanView.donoTarefa}" />
+						<p:commandLink process="btn_pesquisar_usuario">
+							<h:graphicImage library="img" name="pesquisar.png"
+								onclick="PF('dlg_pesquisa').show()" width="20" />
+						</p:commandLink>
+					</p:column>
+					<p:outputLabel value="Descrição " />
+					<p:inputText required="true"
+						requiredMessage="Insira a descrição da tarefa"
+						value="#{tarefaBeanView.tarefa.descricao}" />
+
+					<p:outputLabel value="Data de Inicio : " />
+					<p:datePicker required="true"
+						requiredMessage="Insira a data de Inicio"
+						value="#{tarefaBeanView.tarefa.dataInicial}" />
+
+					<p:outputLabel value="Data para Término " />
+					<p:datePicker mindate="#{tarefaBeanView.tarefa.dataInicial}"
+						requiredMessage="Insira a data final" required="true"
+						value="#{tarefaBeanView.tarefa.dataFinal}" />
+				</p:panelGrid>
+				<p:panelGrid columns="1">
+					<p:commandButton value="Salvar" ajax="false"
+						action="#{tarefaBeanView.salvar}" />
+				</p:panelGrid>
+				<p:growl id="msg" />
+
+			</h:form>
+
+		</p:panel>
+
+		<h:form prependId="false" id="form_tabela_tarefas">
+			<p:dataTable value="#{tarefaBeanView.todasTarefas}" var="tarefa">
+				<p:column>
+					<h:outputText value="#{tarefa.id}" />
+					<f:facet name="header">ID</f:facet>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{tarefa.descricao}" />
+					<f:facet name="header">DESCRICAO</f:facet>
+				</p:column>
+
+				<p:column>
+					<h:outputText readonly="true" value="#{tarefa.dataInicial}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+					<h:outputText value=" até " />
+					<h:outputText readonly="true" value="#{tarefa.dataFinal}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+					<f:facet name="header">Período</f:facet>
+
+				</p:column>
+				<p:column>
+					<h:outputText value="#{tarefa.dono.login}" />
+					<f:facet name="header">DONO</f:facet>
+				</p:column>
+				<p:column headerText="Dias Restantes">
+					<p:outputLabel value="#{loginBeanView.restante(tarefa)}"/>
+					
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog width="500" header="Selecione o Dono da Tarefa"
+			widgetVar="dlg_pesquisa" modal="true" height="400">
+			<h:form prependId="false" id="user_dialog">
+				<p:panelGrid columns="3">
+					<p:outputLabel value="NOME :" />
+					<p:inputText value="#{usuarioBeanView.nomePesquisa}" />
+					<p:commandButton id="btn_pesquisar_usuario" process="@form"
+						update="tabela_pesquisa_dlg"
+						action="#{usuarioBeanView.pesquisaUsuario}" value="Pesquisar" />
+
+
+				</p:panelGrid>
+				<p:spacer></p:spacer>
+				<p:dataTable var="user" id="tabela_pesquisa_dlg"
+					emptyMessage="Nenhum Usuário Encontrado" paginator="true"
+					paginatorPosition="bottom" rows="3" lazy="true" paginatorAlwaysVisible="false"
+					paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					value="#{usuarioBeanView.lazyUsuario}">
+
+					<p:column>
+						<h:outputText value="#{user.nome}" />
+						<f:facet name="header">NOME</f:facet>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">LOGIN</f:facet>
+						<p:commandLink
+							onclick="PF('dlg_pesquisa').hide();document.getElementById('login_dono_tarefa').value='#{user.login}'"
+							value="#{user.login}">
+
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+		</p:dialog>
+	</center>
+
+</h:body>
+</html>

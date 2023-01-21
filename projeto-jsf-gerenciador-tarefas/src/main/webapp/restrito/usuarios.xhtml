@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+</h:head>
+
+
+
+<h:body>
+	<ui:include src="/restrito/menu.xhtml" />
+	<center>
+		<h:form id="form_cadastro">
+			<p:growl id="msg" rendered="true" />
+
+			<h1>Cadastro de Usuarios</h1>
+			<p:panel>
+
+				<p:panelGrid styleClass="ui-panelgrid-noborder" columns="2">
+
+					<h:outputLabel value="ID : " />
+					<p:inputText id="user_id"
+						value="#{usuarioBeanView.usuarioSelecionado.id}" />
+					<h:outputLabel value="Nome: " />
+					<p:inputText required="true" id="user_nome"
+						requiredMessage="Por favor insira o nome."
+						value="#{usuarioBeanView.usuarioSelecionado.nome}" />
+
+					<h:outputLabel value="Email: " />
+					<p:inputText id="user_email" requiredMessage="Insira o Email"
+						required="true"
+						value="#{usuarioBeanView.usuarioSelecionado.email}" />
+
+
+					<h:outputLabel value="Login: " />
+					<p:inputText id="user_login" requiredMessage="Insira o login"
+						required="true"
+						value="#{usuarioBeanView.usuarioSelecionado.login}" />
+
+
+
+					<h:outputLabel value="Senha: " />
+					<p:password id="user_senha" requiredMessage="Insira a senha"
+						required="true"
+						value="#{usuarioBeanView.usuarioSelecionado.senha}" />
+
+
+
+
+				</p:panelGrid>
+
+			</p:panel>
+			<p:spacer></p:spacer>
+
+			<p:panelGrid columns="3">
+				<p:commandButton ajax="false" value="Salvar"
+					action="#{usuarioBeanView.salvar}" />
+
+				<p:commandButton ajax="false" immediate="true" value="Novo"
+					action="#{usuarioBeanView.novo}" />
+				<p:commandButton rendered="true" ajax="false" value="Editar"
+					action="#{usuarioBeanView.editar}" />
+			</p:panelGrid>
+
+
+		</h:form>
+
+
+		<p:spacer></p:spacer>
+
+		<h:form id="form_tabela">
+			<p:dataTable emptyMessage="Nenhum Usuário Cadastrado"
+				paginator="true"  paginatorPosition="bottom" rows="3" lazy="true" id="tabela_todos_usuarios"
+				paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				 value="#{usuarioBeanView.lazyUsuario}" 
+				var="usuario">
+				<p:column width="10">
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{usuario.id}" />
+				</p:column>
+				<p:column headerText="NOME">
+					<h:outputText value="#{usuario.nome}" />
+				</p:column>
+
+				<p:column width="200" headerText="EMAIL">
+
+					<h:outputText value="#{usuario.email}" />
+				</p:column>
+				<p:column width="120" headerText="LOGIN">
+
+					<h:outputText value="#{usuario.login}" />
+				</p:column>
+
+
+				<p:column width="80" headerText="REMOVER">
+					<p:commandLink rendered="true" update="@this :form_tabela"
+						action="#{usuarioBeanView.remover}" value="Remover">
+						<f:setPropertyActionListener value="#{usuario}"
+							target="#{usuarioBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
+
+					</p:commandLink>
+
+				</p:column>
+
+				<p:column width="80" headerText="EDITAR">
+					<p:commandLink rendered="true" update="@this :form_cadastro"
+						ajax="false" value="EDITAR">
+						<f:setPropertyActionListener value="#{usuario}"
+							target="#{usuarioBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
+					</p:commandLink>
+				</p:column>
+
+			</p:dataTable>
+
+
+
+		</h:form>
+	</center>
+</h:body>
+</html>

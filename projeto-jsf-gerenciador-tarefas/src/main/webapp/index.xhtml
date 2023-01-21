@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+</h:head>
+
+
+
+<h:body>
+	<center>
+		<h:form id="form_login">
+			<p:growl id="msg" rendered="true" />
+
+			<h1>Efetue o Login</h1>
+			<p:panel>
+
+				<p:panelGrid styleClass="ui-panelgrid-noborder" columns="2">
+
+					
+					<h:outputLabel value="Login: " />
+					<p:inputText id="user_login" requiredMessage="Insira o login"
+						required="true"
+						value="#{loginBeanView.login}" />
+
+
+
+					<h:outputLabel value="Senha: " />
+					<p:password id="user_senha" requiredMessage="Insira a senha"
+						required="true"
+						value="#{loginBeanView.senha}" />
+
+
+
+
+				</p:panelGrid>
+
+			</p:panel>
+			<p:spacer></p:spacer>
+
+			<p:panelGrid columns="1">
+				<p:commandButton ajax="false" value="Login"
+					action="#{loginBeanView.logar}" />
+
+				
+			</p:panelGrid>
+
+
+		</h:form>
+
+
+		<p:spacer></p:spacer>
+
+		
+	</center>
+</h:body>
+</html>
