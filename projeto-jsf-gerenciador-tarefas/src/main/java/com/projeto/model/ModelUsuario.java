@@ -1,12 +1,17 @@
 package com.projeto.model;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.NamedQuery;
 
@@ -17,6 +22,7 @@ import org.hibernate.annotations.NamedQuery;
 @NamedQuery(name="Usuarios.countAll",query="SELECT count(1) FROM ModelUsuario")
 @NamedQuery(name="Usuarios.countAllNomeLike",query="SELECT count(1) FROM ModelUsuario where upper(nome) like upper(:nome)")
 @NamedQuery(name="Usuarios.countAutenticar",query="SELECT count(1) FROM ModelUsuario where login=:login and senha=:senha")
+@NamedQuery(name="Usuarios.findAllConvidados",query ="FROM ModelTarefa t join t.convidados WHERE t.id = :idTarefa")
 
 @Entity
 public class ModelUsuario implements Serializable {
@@ -33,6 +39,23 @@ public class ModelUsuario implements Serializable {
 	
 	private String nome;
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ModelUsuario other = (ModelUsuario) obj;
+		return Objects.equals(id, other.id);
+	}
+
 	private String email;
 	
 	private String login;
@@ -42,6 +65,12 @@ public class ModelUsuario implements Serializable {
 	@Column
 	private boolean admin;
 
+	@OneToMany(mappedBy = "dono",fetch = FetchType.LAZY)
+	private List<ModelTarefa> minhasTarefas; 
+
+	@ManyToMany(mappedBy = "convidados",fetch = FetchType.LAZY)
+	private List<ModelTarefa> tarefasConvidado;
+	
 	public Long getId() {
 		return id;
 	}

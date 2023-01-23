@@ -67,6 +67,7 @@ public class TarefaBeanView extends Contexto {
 	}
 	
 	public void pesquisaUsuario(){
+		JPAUtil.getEntityManager().close();
 		usuarios=JPAUtil.getEntityManager().createNamedQuery("Usuarios.findAll")
 				.getResultList();
 		
@@ -79,5 +80,17 @@ public class TarefaBeanView extends Contexto {
 	public List<ModelUsuario> getUsuarios() {
 		return usuarios;
 	}
+	public void limpar() {
+		tarefa=new ModelTarefa();
+	}
+	public void remover() {
+		daoTarefas.delete(tarefa);
+		limpar();
+		
+	}
+	
+
+	
+	
 
 }

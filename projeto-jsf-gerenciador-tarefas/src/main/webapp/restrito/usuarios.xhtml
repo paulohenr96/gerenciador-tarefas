@@ -74,8 +74,8 @@
 		<p:spacer></p:spacer>
 
 		<h:form id="form_tabela">
-			<p:dataTable emptyMessage="Nenhum Usuário Cadastrado"
-				paginator="true"  paginatorPosition="bottom" rows="3" lazy="true" id="tabela_todos_usuarios"
+			<p:dataTable emptyMessage="Nenhum Usuário Cadastrado" id="tabela_todos_usuarios"
+				paginator="true"  paginatorPosition="bottom" rows="3" lazy="true" 
 				paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 				 value="#{usuarioBeanView.lazyUsuario}" 
 				var="usuario">
@@ -99,7 +99,9 @@
 
 				<p:column width="80" headerText="REMOVER">
 					<p:commandLink rendered="true" update="@this :form_tabela"
-						action="#{usuarioBeanView.remover}" value="Remover">
+						action="#{usuarioBeanView.remover}" >
+																	<p:graphicImage library="img" name="excluir16.png" width="25px"/>
+						
 						<f:setPropertyActionListener value="#{usuario}"
 							target="#{usuarioBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
 
@@ -108,11 +110,17 @@
 				</p:column>
 
 				<p:column width="80" headerText="EDITAR">
+					
 					<p:commandLink rendered="true" update="@this :form_cadastro"
-						ajax="false" value="EDITAR">
+						ajax="false">
+											<p:graphicImage library="img" name="editar16.png" width="25px">
+																					</p:graphicImage>
+						
 						<f:setPropertyActionListener value="#{usuario}"
 							target="#{usuarioBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
+					
 					</p:commandLink>
+					
 				</p:column>
 
 			</p:dataTable>

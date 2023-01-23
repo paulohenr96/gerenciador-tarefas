@@ -51,6 +51,29 @@ public class DAOGeneric<E> {
 		
 	}
 	
+	public void delete (E e) {
+		
+		EntityManager entityManager = JPAUtil.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.createQuery("DELETE from "+e.getClass().getSimpleName()+" u where u=:u")
+			.setParameter("u", e).executeUpdate();
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+	}
+	public void update (Query hql) {
+		
+
+		EntityManager entityManager = JPAUtil.getEntityManager();
+		entityManager.getTransaction().begin();
+		
+		hql.executeUpdate();
+		
+		
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+	
 	
 	
 }

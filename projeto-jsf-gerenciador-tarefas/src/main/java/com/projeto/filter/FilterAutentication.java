@@ -16,7 +16,6 @@ import com.projeto.model.ModelUsuario;
 /**
  * Servlet Filter implementation class FilterAutentication
  */
-@WebFilter("/FilterAutentication")
 public class FilterAutentication extends HttpFilter implements Filter {
        
     /**

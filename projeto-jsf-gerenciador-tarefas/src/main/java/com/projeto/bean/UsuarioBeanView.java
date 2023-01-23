@@ -78,7 +78,7 @@ public class UsuarioBeanView extends Contexto {
 
 	public String remover() {
 		System.out.println("Remover");
-		daoUsuario.deletar(usuarioSelecionado);
+		daoUsuario.delete(usuarioSelecionado);
 		usuarioSelecionado = new ModelUsuario();
 
 		return "";

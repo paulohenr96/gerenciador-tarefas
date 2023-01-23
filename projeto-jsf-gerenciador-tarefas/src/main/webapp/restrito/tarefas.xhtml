@@ -55,7 +55,7 @@
 
 		<h:form prependId="false" id="form_tabela_tarefas">
 			<p:dataTable value="#{tarefaBeanView.todasTarefas}" var="tarefa">
-				<p:column>
+				<p:column width="50px">
 					<h:outputText value="#{tarefa.id}" />
 					<f:facet name="header">ID</f:facet>
 				</p:column>
@@ -76,14 +76,31 @@
 					<f:facet name="header">Período</f:facet>
 
 				</p:column>
-				<p:column>
+				<p:column headerText="Dono">
 					<h:outputText value="#{tarefa.dono.login}" />
-					<f:facet name="header">DONO</f:facet>
+				</p:column>
+				<p:column headerText="Data de Término">
+					<h:outputText rendered="#{tarefa.dataTermino !=null}" readonly="true" value="#{tarefa.dataTermino}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+					<h:outputText rendered="#{tarefa.dataTermino ==null}" readonly="true" value="Tarefa incompleta."/>
+
 				</p:column>
 				<p:column headerText="Dias Restantes">
 					<p:outputLabel value="#{loginBeanView.restante(tarefa)}"/>
 					
 				</p:column>
+				
+				
+				<p:column headerText="Remover">
+				<p:commandLink  action="#{tarefaBeanView.remover}" update=":form_tarefa">
+				<p:graphicImage library="img" name="deletar.png" width="24px"/>
+					<f:setPropertyActionListener value="#{tarefa}" target="#{tarefaBeanView.tarefa}"></f:setPropertyActionListener>
+					
+				</p:commandLink>
+					
+				</p:column>
+				
 			</p:dataTable>
 		</h:form>
 
@@ -119,6 +136,7 @@
 
 						</p:commandLink>
 					</p:column>
+					
 				</p:dataTable>
 			</h:form>
 

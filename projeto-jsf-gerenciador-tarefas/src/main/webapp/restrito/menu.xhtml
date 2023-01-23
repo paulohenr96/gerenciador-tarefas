@@ -16,10 +16,10 @@
         <p:breadCrumb>
             <p:menuitem value="Tarefas"/>
             
-            <p:menuitem   value="Usuarios" url="usuarios.jsf"/>
-            <p:menuitem  value="Tarefas" url="tarefas.jsf"/>
+            <p:menuitem render="{userlogado.admin}"  value="Usuarios" url="usuarios.jsf"/>
+            <p:menuitem render="{userlogado.admin}" value="Tarefas" url="tarefas.jsf"/>
             <p:menuitem rendered="#{!userlogado.admin}" value="Minhas Tarefas" url="minhastarefas.jsf"/>
-            <p:menuitem value="Accessories"/>
+            <p:menuitem value="Outras Tarefas" url="outrastarefas.jsf"/>
             <p:menuitem value="#{userlogado.login}"/>
             <p:menuitem value="SAIR" action="#{loginBeanView.deslogar}"/>
         </p:breadCrumb>
