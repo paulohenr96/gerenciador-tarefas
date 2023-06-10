@@ -43,7 +43,6 @@ public class DAOTarefas extends DAOGeneric<ModelTarefa> {
 		query.setParameter("tarefa", tarefa.getId()).setParameter("user", user.getId());
 		query.executeUpdate();
 		transaction.commit();
-		entityManager.close();
 		
 	}
 	

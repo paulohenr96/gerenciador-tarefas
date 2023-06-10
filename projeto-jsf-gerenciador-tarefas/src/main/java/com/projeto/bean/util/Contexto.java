@@ -1,5 +1,6 @@
 package com.projeto.bean.util;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.projeto.model.ModelUsuario;
@@ -11,5 +12,9 @@ public class Contexto extends Mensagens{
 		ModelUsuario user = (ModelUsuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userlogado");
 		
 		return user;
+	}
+	
+	public ExternalContext getContext() {
+		return FacesContext.getCurrentInstance().getExternalContext();
 	}
 }

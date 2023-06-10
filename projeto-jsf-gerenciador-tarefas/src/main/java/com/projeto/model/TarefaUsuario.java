@@ -11,8 +11,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQuery;
 
 
-@NamedQuery(name = "UsuarioTarefa.findTarefas",query = "Select tarefa FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino=null")
-@NamedQuery(name = "UsuarioTarefa.findTarefasPendentes",query = "Select tarefa FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino!=null")
+@NamedQuery(name = "UsuarioTarefa.findTarefas",query = "Select tarefa FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino is null")
+@NamedQuery(name = "UsuarioTarefa.findTarefasCount",query = "Select count(tarefa)  FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino is null")
+
+@NamedQuery(name = "UsuarioTarefa.findTarefasPendentes",query = "Select tarefa FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino is not null")
+@NamedQuery(name = "UsuarioTarefa.findTarefasPendentesCount",query = "Select count(tarefa)  FROM ModelTarefa tarefa JOIN tarefa.convidados c where c.id=:user and tarefa.dataTermino is not null")
 
 
 @Table(name = "tarefa_usuario")

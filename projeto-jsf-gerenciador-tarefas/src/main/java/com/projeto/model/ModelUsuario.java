@@ -118,5 +118,18 @@ public class ModelUsuario implements Serializable {
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
+
+	@Override
+	public String toString() {
+		return id + ";" + nome + ";" + email + ";" + login + ";" + senha + ";" + admin + ";";
+	}
+
+	public List<ModelTarefa> getTarefasConvidado() {
+		return tarefasConvidado;
+	}
+
+	public void setTarefasConvidado(List<ModelTarefa> tarefasConvidado) {
+		this.tarefasConvidado = tarefasConvidado;
+	}
 	
 }

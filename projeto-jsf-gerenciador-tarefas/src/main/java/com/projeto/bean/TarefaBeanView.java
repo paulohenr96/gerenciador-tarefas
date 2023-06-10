@@ -28,7 +28,7 @@ public class TarefaBeanView extends Contexto {
 	private List<ModelUsuario> usuarios = new ArrayList<ModelUsuario>();
 	
 	public String salvar () {
-			Long login = daoUsuario.checarLogin(getDonoTarefa());
+			Long login = daoUsuario.pesquisarLogin(getDonoTarefa());
 			if (login.intValue()>0) {
 				ModelUsuario dono = (ModelUsuario) JPAUtil.getEntityManager()
 						.createNamedQuery("Usuarios.findByLogin")
@@ -67,7 +67,7 @@ public class TarefaBeanView extends Contexto {
 	}
 	
 	public void pesquisaUsuario(){
-		JPAUtil.getEntityManager().close();
+		JPAUtil.getEntityManager();
 		usuarios=JPAUtil.getEntityManager().createNamedQuery("Usuarios.findAll")
 				.getResultList();
 		

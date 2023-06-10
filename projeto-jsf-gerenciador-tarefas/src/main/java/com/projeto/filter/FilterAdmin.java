@@ -14,14 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import com.projeto.model.ModelUsuario;
 
 /**
- * Servlet Filter implementation class FilterAutentication
+ * Servlet Filter implementation class FilterAdmin
  */
-public class FilterAutentication extends HttpFilter implements Filter {
+@WebFilter("/FilterAdmin")
+public class FilterAdmin extends HttpFilter implements Filter {
        
     /**
      * @see HttpFilter#HttpFilter()
      */
-    public FilterAutentication() {
+    public FilterAdmin() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,19 +40,17 @@ public class FilterAutentication extends HttpFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
+
+		// pass the request along the filter chain
 		
-		System.out.println("Filtro !");
 		HttpServletRequest req=(HttpServletRequest) request;
 		ModelUsuario user = (ModelUsuario) req.getSession().getAttribute("userlogado");
-		System.out.println(user);
-		if (user==null) {
-			request.getRequestDispatcher("/erro/authentication.jsf").forward(request, response);
-		}else {
-			System.out.println("PASSOU PELO FILTRO");
-			chain.doFilter(request, response);
+		
+		if (!user.getAdmin()) {
+			request.getRequestDispatcher("/erro/erroadmin.jsf").forward(request, response);
 
 		}
-		// pass the request along the filter chain
+		chain.doFilter(request, response);
 	}
 
 	/**

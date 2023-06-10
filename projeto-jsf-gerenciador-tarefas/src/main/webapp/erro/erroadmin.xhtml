@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+</h:head>
+
+
+<h:body>
+	<center>
+		<h:form>
+			<p:panelGrid columns="1">
+				<p:row>
+					<h2>Está página é restrita apenas para administradores.</h2>
+
+				</p:row>
+				<p:row>
+					<p:commandButton ajax="false"
+						actionListener="#{redirecionamentoBeanView.minhasTarefas()}"
+						value="VOLTAR" />
+				</p:row>
+
+			</p:panelGrid>
+		</h:form>
+	</center>
+</h:body>
+</html>

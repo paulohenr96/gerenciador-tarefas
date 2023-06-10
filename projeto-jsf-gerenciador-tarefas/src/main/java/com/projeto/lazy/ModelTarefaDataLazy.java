@@ -22,6 +22,7 @@ public class ModelTarefaDataLazy extends LazyDataModel<ModelTarefa>{
 	@Override
 	public int count(Map<String, FilterMeta> filterBy) {
 		// TODO Auto-generated method stub
+		System.out.println(getQueryContar());
 		setTotal(daoTarefas.count(getQueryContar()).intValue());
 		
 		return getTotal();

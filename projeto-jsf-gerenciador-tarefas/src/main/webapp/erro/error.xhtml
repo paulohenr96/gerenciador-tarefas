@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+</h:head>
+
+
+<h:body>
+
+	<h:form>
+		<center>
+			<p:panelGrid columns="1">
+				<p:row>
+					<center>
+						<h1>Ocorreu um Erro</h1>
+					</center>
+				</p:row>
+				<p:row>
+					<p:panelGrid columns="2">
+						<p:outputLabel value="Código" style="font-weight:bold" />
+						<h:outputText value="#{errorHandlerBeanView.codigo}" />
+						
+						
+						<p:outputLabel value="Mensagem" style="font-weight:bold"/>
+						<h:outputText value="#{errorHandlerBeanView.mensagem}" />
+
+						<p:outputLabel value="Tipo" style="font-weight:bold"/>
+						<h:outputText value="#{errorHandlerBeanView.exceptionType}" />
+
+						<p:outputLabel value="Exceção" style="font-weight:bold"/>
+						<h:outputText value="#{errorHandlerBeanView.exception}" />
+						
+						
+						<p:outputLabel value="Servlet" style="font-weight:bold"/>
+						<h:outputText value="#{errorHandlerBeanView.servletName}" />
+					</p:panelGrid>
+				</p:row>
+			</p:panelGrid>
+
+		</center>
+		<p:spacer/>
+				<p:spacer/>
+		
+		<center>
+			<p:commandButton action="#{redirecionamentoBeanView.index()}" value="Pagina Inicial"/>
+		</center>
+	</h:form>
+
+</h:body>
+</html>

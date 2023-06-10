@@ -21,25 +21,27 @@
 	<p:spacer />
 	<p:spacer />
 	<p:spacer />
-	<p:dataTable var="tarefa" id="tabela_tarefaspendentes"
+
+
+	<p:dataTable var="t" id="tabela_tarefaspendentes"
 		emptyMessage="Você não possui tarefas pendentes" paginator="true"
 		paginatorPosition="bottom" rows="3" lazy="true"
 		paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-		value="#{loginBeanView.tarefasPendentes}">
+		value="#{minhasTarefasBeanView.tarefasPendentes}">
 
 		<f:facet name="header">
-            Tarefas Pendentes #{loginBeanView.tarefaDataLazy.total}
+            Tarefas Pendentes #{minhasTarefasBeanView.tarefaDataLazy.total}
         </f:facet>
 		<p:column width="30px" headerText="ID">
-			<p:outputLabel value="#{tarefa.id}" />
+			<p:outputLabel value="#{t.id}" />
 
 		</p:column>
 		<p:column headerText="Descricao">
-			<p:outputLabel value="#{tarefa.descricao}" />
+			<p:outputLabel value="#{t.descricao}" />
 
 		</p:column>
 		<p:column width="100px" headerText="Data Inicial">
-			<p:outputLabel value="#{tarefa.dataInicial}">
+			<p:outputLabel value="#{t.dataInicial}">
 
 				<f:convertDateTime pattern="dd/MM/yyyy" />
 
@@ -47,56 +49,58 @@
 
 		</p:column>
 		<p:column width="100px" headerText="Data Final">
-			<p:outputLabel value="#{tarefa.dataFinal}">
+			<p:outputLabel value="#{t.dataFinal}">
 				<f:convertDateTime pattern="dd/MM/yyyy" />
 			</p:outputLabel>
 
 		</p:column>
 		<p:column width="50px" headerText="Dias">
-			<p:outputLabel value="#{loginBeanView.restante(tarefa)}">
+			<p:outputLabel value="#{minhasTarefasBeanView.restante(t)}">
 			</p:outputLabel>
 
 		</p:column>
 
 		<p:column width="100px" headerText="Completar">
-			<p:commandLink rendered="#{tarefa.dataTermino == null}"
-				value="Completar" onclick="PF('dlg_tarefa').show()">
 
-				<f:setPropertyActionListener value="#{tarefa}"
-					target="#{loginBeanView.tarefa}" />
+			<p:commandLink onclick="PF('dlg_tarefa').show()" value="Completar">
+
+				<f:setPropertyActionListener value="#{t}"
+					target="#{minhasTarefasBeanView.tarefaPendente}"></f:setPropertyActionListener>
 			</p:commandLink>
+
+
 		</p:column>
 
 
-		<p:column width="100px" headerText="Convidar">
+		<p:column width="100px" 
+		headerText="Convidar">
 			<p:commandLink
-				value="Convidar(#{loginBeanView.contarConvidadosTarefa(tarefa)})"
-				action="#{loginBeanView.pegarConvidadosDaTarefa}"
-				update="lista_convidadostarefa" onclick="PF('dlg_convidar').show()">
+				value="Convidar(#{minhasTarefasBeanView.contarConvidadosTarefa(t)})"
+				action="#{minhasTarefasBeanView.pegarConvidadosDaTarefa()}"
+				update="lista_convidadostarefa" 
+				onclick="PF('dlg_convidar').show()">
 
-				<f:setPropertyActionListener value="#{tarefa}"
-					target="#{loginBeanView.tarefa}"></f:setPropertyActionListener>
+				<f:setPropertyActionListener value="#{t}"
+					target="#{minhasTarefasBeanView.tarefaPendente}"></f:setPropertyActionListener>
 			</p:commandLink>
 		</p:column>
 
 	</p:dataTable>
-
 	<!-- <p:commandButton value="Enviar Tarefas Prontas" id="botao_enviartarefas" style="display:none;"/> -->
-
-
+	
 	<p:spacer />
 	<p:spacer />
 	<p:spacer />
 
 	<p:dataTable var="tarefa" id="tabela_tarefascompletas"
 		emptyMessage="Você não possui tarefas completas"
-		rowStyleClass="azulado" paginator="true"
-		paginatorPosition="bottom" rows="2" lazy="true"
+		rowStyleClass="azulado" paginator="true" paginatorPosition="bottom"
+		rows="5" lazy="true"
 		paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-		value="#{loginBeanView.minhasTarefasCompletas}">
+		value="#{minhasTarefasBeanView.minhasTarefasCompletas}">
 
 		<f:facet name="header">
-            Tarefas Completadas : #{loginBeanView.minhasTarefasCompletas.total}
+            Tarefas Completadas : #{minhasTarefasBeanView.minhasTarefasCompletas.total}
         </f:facet>
 		<p:column headerText="ID">
 			<p:outputLabel value="#{tarefa.id}" />
@@ -132,11 +136,14 @@
 				<p:outputLabel
 					value="Tem certeza que deseja completar esta tarefa ?" />
 				<p:outputLabel />
+				
+
 
 				<p:column>
-					<p:commandButton oncomplete="PF('dlg_tarefa').hide()"
+					<p:commandButton oncomplete="PF('dlg_tarefa').hide() "
 						update="tabela_tarefaspendentes tabela_tarefascompletas"
-						action="#{loginBeanView.completarTarefa}" value="Completar" />
+						action="#{minhasTarefasBeanView.completarTarefa}"
+						value="Completar" />
 					<p:spacer />
 					<p:commandButton onclick="PF('dlg_tarefa').hide()" value="Cancelar" />
 				</p:column>
@@ -150,10 +157,10 @@
 		<h:form id="formulario_convidados" prependId="false">
 			<p:panelGrid columns="3">
 				<p:outputLabel value="Login" />
-				<p:inputText value="#{loginBeanView.usuarioParaConvidar}" />
+				<p:inputText value="#{minhasTarefasBeanView.usuarioParaConvidar}" />
 				<p:commandButton
 					update="lista_convidadostarefa tabela_tarefaspendentes msg"
-					action="#{loginBeanView.convidar}" value="Convidar" />
+					action="#{minhasTarefasBeanView.convidar}" value="Convidar" />
 			</p:panelGrid>
 
 			<center>
@@ -162,13 +169,13 @@
 				<div class="card">
 
 					<h5>CONVIDADOS</h5>
-					<!-- 					<p:orderList value="#{loginBeanView.usuariosConvidados}" -->
+					<!-- 					<p:orderList value="#{minhasTarefasBeanView.usuariosConvidados}" -->
 					<!-- 						id="lista_convidadostarefa" var="user" controlsLocation="none" -->
 					<!-- 						converter="usuarioConverter" itemLabel="#{user.login}" -->
 					<!-- 						itemValue="#{user}"  /> -->
 					<p:dataTable emptyMessage="Esta tarefa não possui convidados."
 						id="lista_convidadostarefa"
-						value="#{loginBeanView.usuariosConvidados}" var="user">
+						value="#{minhasTarefasBeanView.usuariosConvidados}" var="user">
 						<p:column headerText="Nome">
 							<p:outputLabel value="#{user.nome}" />
 						</p:column>
@@ -178,9 +185,10 @@
 						<p:column headerText="Remover">
 							<p:commandLink
 								update="lista_convidadostarefa tabela_tarefaspendentes"
-								value="Remover" action="#{loginBeanView.removerConvidado}">
+								value="Remover"
+								action="#{minhasTarefasBeanView.removerConvidado}">
 								<f:setPropertyActionListener value="#{user}"
-									target="#{loginBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
+									target="#{minhasTarefasBeanView.usuarioSelecionado}"></f:setPropertyActionListener>
 							</p:commandLink>
 						</p:column>
 					</p:dataTable>
@@ -191,5 +199,17 @@
 		</h:form>
 	</p:dialog>
 
+	<script>
+		function abrirDialogo(id) {
+			alert("Completando ... " + id)
+			PF('dlg_tarefa').show();
+
+			var input = document.getElementById('form:tarefaCampoDialogo'); // Substitua 'form' pelo ID do seu formulário
+			input.value = id;
+
+		}
+	</script>
 </h:body>
+
+
 </html>

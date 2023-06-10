@@ -22,11 +22,11 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 
 @NamedQuery(name = "Tarefa.findAll",query = "FROM ModelTarefa")
-@NamedQuery(name = "Tarefa.findAllDonoPendentes",query = "FROM ModelTarefa where dono=:dono AND dataTermino = null")
-@NamedQuery(name = "Tarefa.findAllDonoCompletas",query = "FROM ModelTarefa where dono=:dono AND dataTermino != null")
+@NamedQuery(name = "Tarefa.findAllDonoPendentes",query = "FROM ModelTarefa where dono=:dono AND dataTermino is null")
+@NamedQuery(name = "Tarefa.findAllDonoCompletas",query = "FROM ModelTarefa where dono=:dono AND dataTermino IS NOT null")
 @NamedQuery(name = "Tarefa.donoCount",query="select count(1) FROM ModelTarefa where dono=:dono")
-@NamedQuery(name = "Tarefa.donoCountCompletas",query="select count(1) FROM ModelTarefa where dono=:dono AND dataTermino!=null")
-@NamedQuery(name = "Tarefa.donoCountPendentes",query="select count(1) FROM ModelTarefa where dono=:dono AND dataTermino=null")
+@NamedQuery(name = "Tarefa.donoCountCompletas",query="select count(1) FROM ModelTarefa where dono=:dono AND dataTermino IS NOT null")
+@NamedQuery(name = "Tarefa.donoCountPendentes",query="select count(1) FROM ModelTarefa where dono=:dono AND dataTermino is null")
 
 
 @Entity
@@ -51,7 +51,7 @@ public class ModelTarefa {
 	private Long id;
 
 	@ManyToOne(optional = false)
-	private ModelUsuario dono = new ModelUsuario();
+	private ModelUsuario dono;
 
 	 @JoinTable(name = "tarefa_usuario",
 		        joinColumns = {@JoinColumn(name = "tarefa_id")},
@@ -108,6 +108,11 @@ public class ModelTarefa {
 	}
 	public void setDataTermino(Date dataTermino) {
 		this.dataTermino = dataTermino;
+	}
+	@Override
+	public String toString() {
+		return id + ";"  + ";" + convidados + ";" + descricao + ";" + dataInicial + ";" + dataFinal + ";"
+				+ dataTermino;
 	}
 
 }

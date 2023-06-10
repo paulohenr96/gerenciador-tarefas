@@ -46,7 +46,7 @@ public class UsuarioBeanView extends Contexto {
 		System.out.println("teste");
 		getUserLogado();
 		if (usuarioSelecionado != null) {
-			if (daoUsuario.checarLogin(usuarioSelecionado.getLogin()) > 0) {
+			if (daoUsuario.pesquisarLogin(usuarioSelecionado.getLogin()) > 0) {
 				mensagemError("Já existe usuario com este login");
 			} else {
 				daoUsuario.save(usuarioSelecionado);
@@ -105,7 +105,7 @@ public class UsuarioBeanView extends Contexto {
 			ModelUsuario find = JPAUtil.getEntityManager().find(ModelUsuario.class, usuarioSelecionado.getId());
 
 			if (!find.getLogin().equals(login)) {
-				boolean loginNovo = daoUsuario.checarLogin(login).intValue() == 0;
+				boolean loginNovo = daoUsuario.pesquisarLogin(login).intValue() == 0;
 
 				if (loginNovo) {
 					usuarioSelecionado.setLogin(login);

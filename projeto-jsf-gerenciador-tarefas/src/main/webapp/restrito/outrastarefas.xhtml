@@ -18,24 +18,27 @@
 
 <h:body>
 	<ui:include src="/restrito/menu.xhtml" />
-
+		<h1>Tarefas que você é convidado.</h1>
 	<h:form prependId="false">
 
-		<p:dataTable align="center"
-			value="#{loginBeanView.minhasTarefasConvidado}" var="tarefa">
-				<f:facet name="header">Tarefas Convidado Completas</f:facet>
-			<p:column  headerText="Dono">
+		<p:dataTable align="center" var="tarefa"
+			emptyMessage="Você não possui tarefas pendentes" paginator="true"
+			paginatorPosition="bottom" rows="3" lazy="true"
+			paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+			value="#{minhasTarefasConvidadoBeanView.tarefasPendentes}">
+			<f:facet name="header">Tarefas pendentes que você é convidado.</f:facet>
+			<p:column headerText="Dono">
 				<p:outputLabel value="#{tarefa.dono.nome} (#{tarefa.dono.login})" />
 
 			</p:column>
 
-			<p:column align="center" >
-			<f:facet name="header">Descrição</f:facet>
+			<p:column align="center">
+				<f:facet name="header">Descrição</f:facet>
 				<p:outputLabel value="#{tarefa.descricao}" />
 
 			</p:column>
 
-			<p:column  headerText="Inicio">
+			<p:column headerText="Inicio">
 				<p:outputLabel value="#{tarefa.dataInicial}">
 					<f:convertDateTime pattern="dd/MM/yyyy" />
 
@@ -43,7 +46,7 @@
 
 			</p:column>
 
-			<p:column  headerText="Prazo Final">
+			<p:column headerText="Prazo Final">
 				<p:outputLabel value="#{tarefa.dataFinal}">
 					<f:convertDateTime pattern="dd/MM/yyyy" />
 
@@ -60,8 +63,12 @@
 		<p:spacer />
 		<p:spacer />
 
-		<p:dataTable value="#{loginBeanView.minhasTarefasConvidadoPendentes}" 
-			var="tarefa">
+		<p:dataTable var="tarefa" id="tabela_tarefascompletas"
+			emptyMessage="Você não possui tarefas completas"
+			rowStyleClass="azulado" paginator="true" paginatorPosition="bottom"
+			rows="5" lazy="true"
+			paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+			value="#{minhasTarefasConvidadoBeanView.minhasTarefasCompletas}">
 			<f:facet name="header">Tarefas Finalizadas</f:facet>
 			<p:column styleClass="centro" headerText="Dono">
 				<p:outputLabel value="#{tarefa.dono.nome} (#{tarefa.dono.login})" />

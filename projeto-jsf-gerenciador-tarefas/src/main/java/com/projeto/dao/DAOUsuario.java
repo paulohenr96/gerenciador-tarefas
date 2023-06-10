@@ -13,7 +13,12 @@ public class DAOUsuario extends DAOGeneric<ModelUsuario> {
 	
 	
 	
-	public Long checarLogin (String login) {
+	public Long checarLogin (String login, String senha) {
+		
+		Query query = JPAUtil.getEntityManager().createQuery("select count(1) from ModelUsuario where upper(login)=upper(:login) AND senha=:senha").setParameter("login", login).setParameter("senha", senha);
+		return count(query);
+	}
+public Long pesquisarLogin (String login) {
 		
 		Query query = JPAUtil.getEntityManager().createQuery("select count(1) from ModelUsuario where upper(login)=upper(:login)").setParameter("login", login);
 		return count(query);

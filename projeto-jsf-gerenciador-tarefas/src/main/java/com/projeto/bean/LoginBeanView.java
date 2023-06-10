@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import com.projeto.bean.util.Contexto;
-import com.projeto.bean.util.Mensagens;
 import com.projeto.dao.DAOTarefas;
 import com.projeto.dao.DAOUsuario;
 import com.projeto.lazy.ModelTarefaDataLazy;
@@ -30,16 +31,16 @@ public class LoginBeanView extends Contexto {
 	private String login;
 	private String senha;
 	private Date hoje= new Date();
-	private String usuarioParaConvidar="";
-	private ModelUsuario usuarioSelecionado=new ModelUsuario();
-	private ModelTarefa tarefa=new ModelTarefa();
-	private List<ModelUsuario> usuariosConvidados = new ArrayList<ModelUsuario> (); 
-	private List<ModelTarefa> minhasTarefasConvidado=new ArrayList<ModelTarefa>();
-	private List<ModelTarefa> minhasTarefasConvidadoPendentes=new ArrayList<ModelTarefa>();
-	
-	private ModelTarefaDataLazy tarefaDataLazy= new ModelTarefaDataLazy();
+	private ModelTarefa tarefa;
 	
 	
+	
+	
+	@PostConstruct
+	public void init() {
+		System.out.println(" === "+"INICIALIZANDO LOGINBEANVIEW"+" === ");
+		
+	}
 	
 	public String getLogin() {
 		return login;
@@ -59,20 +60,26 @@ public class LoginBeanView extends Contexto {
 
 	public void logar() throws IOException {
 
-		Long total = daoUsuario.checarLogin(login);
-		Query query = JPAUtil.getEntityManager().createNamedQuery("Usuarios.countAutenticar")
-				.setParameter("login", login).setParameter("senha", senha);
+		Long total = daoUsuario.checarLogin(login,senha);
+//		Query query = JPAUtil.getEntityManager().createNamedQuery("Usuarios.countAutenticar")
+//				.setParameter("login", login).setParameter("senha", senha);
+		JPAUtil.getEntityManager().isOpen();
 		Query queryConsultar= JPAUtil.getEntityManager().createNamedQuery("Usuarios.findUser").setParameter("login", login).setParameter("senha", senha);
 		if (total.intValue() == 0) {
-			mensagemError("Não existe usuário com este login.");
-		} else if (daoUsuario.count(query).intValue() == 0) {
-			mensagemError("Senha incorreta.");
+			mensagemError("Usuário ou senha incorreta.");
+		
 
 		}else {
 			ModelUsuario usuarioLogado = daoUsuario.findEntity(queryConsultar);
 			HttpServletRequest req=(HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 			req.getSession().setAttribute("userlogado", usuarioLogado);
-			 FacesContext.getCurrentInstance().getExternalContext().redirect("restrito/usuarios.jsf");
+			if (usuarioLogado.getAdmin()) {
+				getContext().redirect("administrador/usuarios.jsf");
+
+			}else {
+				getContext().redirect("restrito/minhastarefas.jsf");
+
+			}
 			mensagemInfo("Usuário Logado com Sucesso");
 		}
 
@@ -93,14 +100,7 @@ public class LoginBeanView extends Contexto {
 //		
 //		return minhasTarefas;
 //	}
-	public ModelTarefaDataLazy getTarefasPendentes() {
-		tarefaDataLazy.setQueryContar(JPAUtil.getEntityManager().createNamedQuery("Tarefa.donoCountPendentes").setParameter("dono", getUserLogado()));
-		tarefaDataLazy.setQueryBusca(JPAUtil.getEntityManager().createNamedQuery("Tarefa.findAllDonoPendentes").setParameter("dono", getUserLogado()));
-
-		
-		return tarefaDataLazy;
-		
-	}
+	
 
 
 
@@ -127,138 +127,43 @@ public class LoginBeanView extends Contexto {
 		return tarefa;
 	}
 
-
+	public boolean verificarAdmin() {
+		return getUserLogado().getAdmin();
+	}
 	public void setTarefa(ModelTarefa tarefa) {
+		System.out.println("Setando Tarefa...");
 		this.tarefa = tarefa;
 	}
 	
 	
-	public void completarTarefa () {
-		tarefa.setDataTermino(hoje);
-		daoTarefas.merge(tarefa);
-		mensagemSucesso("Parabéns, você completou esta tarefa !");
-	}
-
-
-	public ModelTarefaDataLazy getMinhasTarefasCompletas() {
-		
-		tarefaDataLazy.setQueryBusca(JPAUtil.getEntityManager().createNamedQuery("Tarefa.findAllDonoCompletas").setParameter("dono",getUserLogado()));
-		tarefaDataLazy.setQueryContar(JPAUtil.getEntityManager().createNamedQuery("Tarefa.donoCountCompletas").setParameter("dono",getUserLogado()));
-		return tarefaDataLazy;
-	}
-
+	
 
 	
-	public void convidar() {
-		System.out.println("Convidando para a Tarefa : "+tarefa.getId());
-		Long checarLogin = daoUsuario.checarLogin(usuarioParaConvidar);
-		if (checarLogin.intValue()==0) {
-			mensagemError("O usuário não existe !");
-
-		}
-		else {
-			usuarioSelecionado=daoUsuario.findEntityByLogin(usuarioParaConvidar);
-			if (getUsuarioSelecionado()!=null) {
-				
-				if (!daoUsuario.contemConvidado(usuarioSelecionado, tarefa)) {
-					daoTarefas.adicionarConvidados(usuarioSelecionado,tarefa);
-					pegarConvidadosDaTarefa();
-					mensagemSucesso("O usuário foi convidado");
-				}else {
-					mensagemError("O usuário já está como convidado desta tarefa !");
-				}
-				
-
-			}
-		}
-		
-		
-	}
 
 
-	
-	public ModelUsuario getUsuarioSelecionado() {
-		return usuarioSelecionado;
-	}
-
-
-	public void setUsuarioSelecionado(ModelUsuario usuarioSelecionado) {
-		this.usuarioSelecionado = usuarioSelecionado;
-	}
-
-
-	public String getUsuarioParaConvidar() {
-		return usuarioParaConvidar;
-	}
-
-
-	public void setUsuarioParaConvidar(String usuarioParaConvidar) {
-		this.usuarioParaConvidar = usuarioParaConvidar;
-	}
-
-	public int contarConvidadosTarefa(ModelTarefa t) {
-		
-		return daoTarefas.contarTodos(t).intValue();
-	}
-
-	public void pegarConvidadosDaTarefa() {
-		usuariosConvidados=daoUsuario.findAllUsuarioTarefa(tarefa);
-
-	}
-	public List<ModelUsuario> getUsuariosConvidados() {
-	
-		return usuariosConvidados;
-	}
-
-
-	public void setUsuariosConvidados(List<ModelUsuario> usuariosConvidados) {
-		this.usuariosConvidados = usuariosConvidados;
-	}
-	
-	public void removerConvidado( ) {
-		
-		if (usuarioSelecionado!=null && tarefa!=null) {
-			daoTarefas.removerConvidadoTarefa(tarefa,usuarioSelecionado);
-			mensagemError("Usuario removido com sucesso !");
-			pegarConvidadosDaTarefa();
-		}
-		
-	}
 	
 	
 
 
-	public List<ModelTarefa> getMinhasTarefasConvidado() {
-		minhasTarefasConvidado= daoTarefas.userTarefasConvocado(getUserLogado());
-		
-		return minhasTarefasConvidado;
-	}
+	
+
+	
 
 
-	public void setMinhasTarefasConvidado(List<ModelTarefa> minhasTarefasConvidado) {
-		this.minhasTarefasConvidado = minhasTarefasConvidado;
-	}
+	
+	
+	
+	
+	
+	
 
 
-	public List<ModelTarefa> getMinhasTarefasConvidadoPendentes() {
-		minhasTarefasConvidadoPendentes=daoTarefas.findAll(JPAUtil.getEntityManager()
-				.createNamedQuery("UsuarioTarefa.findTarefasPendentes")
-				.setParameter("user", getUserLogado().getId()));
-		return minhasTarefasConvidadoPendentes;
-	}
 
 
-	public void setMinhasTarefasConvidadoPendentes(List<ModelTarefa> minhasTarefasConvidadoPendentes) {
-		this.minhasTarefasConvidadoPendentes = minhasTarefasConvidadoPendentes;
-	}
+
+	
+
+	
 
 
-	public ModelTarefaDataLazy getTarefaDataLazy() {
-		return tarefaDataLazy;
-	}
-
-
-	public void setTarefaDataLazy(ModelTarefaDataLazy tarefaDataLazy) {
-		this.tarefaDataLazy = tarefaDataLazy;
-	}
 }
