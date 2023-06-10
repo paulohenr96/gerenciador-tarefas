@@ -9,6 +9,9 @@ Este é um projeto de um gerenciador de tarefas onde cada tarefa possui um dono 
 - Criação de tarefas e atribuição de dono (somente para administradores)
 - Visualização das tarefas de um usuário (próprias e convidado)
 - Convite de usuários para tarefas (somente para não administradores)
+![image](https://github.com/paulohenr96/gerenciador-tarefas/assets/89654592/9bb5b1bd-e339-4095-aa48-111261ed43db)
+![image](https://github.com/paulohenr96/gerenciador-tarefas/assets/89654592/5705eafb-7762-4368-abbb-feb719eadbb4)
+
 
 ## Pacotes e Classes
 
