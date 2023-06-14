@@ -1,7 +1,12 @@
 # Gerenciador de Tarefas
 
 Este é um projeto de um gerenciador de tarefas onde cada tarefa possui um dono e uma lista de convidados. Os usuários podem ser administradores ou não. Os administradores têm permissão para cadastrar novos usuários e atribuir tarefas a eles. Usuários não administradores podem visualizar as tarefas das quais são donos e convidar outros usuários para essas tarefas. Na aba "Outras Tarefas", os usuários podem visualizar as tarefas para as quais foram convidados.
-
+## Tecnologias
+- HIBERNATE
+- JSF 2.3
+- PRIMEFACES
+- JQUERY
+- JAVASCRIPT
 ## Funcionalidades
 
 - Login e deslogar de usuários
